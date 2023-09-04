@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "rachio-webhook"
+version = "0.1.0"
+description = ""
+authors = ["mrkirby153 <mr.austinwhyte@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Flask = "^2.3.3"
+python-decouple = "^3.8"
+requests = "^2.31.0"
+python-dotenv = "^1.0.0"
+python-dateutil = "^2.8.2"
+pluralizer = "^1.2.0"
+gunicorn = "^21.2.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.7.0"
+isort = "^5.12.0"
+mypy = "^1.5.1"
+types-requests = "^2.31.0.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

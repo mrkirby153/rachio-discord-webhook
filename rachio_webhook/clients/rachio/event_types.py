@@ -1,0 +1,12 @@
+from enum import Enum
+
+
+class EventTypes(Enum):
+    DEVICE_STATUS_EVENT = "5"
+    ZONE_STATUS_EVENT = "10"
+    RAIN_DELAY_EVENT = "7"
+    WEATHER_INTELLIGENCE_EVENT = "7"
+    SCHEDULE_STATUS_EVENT = "9"
+    RAIN_SENSOR_DETECTION_EVENT = "11"
+    ZONE_DELTA = "12"
+    DELTA = "14"
