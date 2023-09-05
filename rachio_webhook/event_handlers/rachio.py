@@ -29,11 +29,23 @@ class ZoneMessageHandler(MessageHandler):
     def handle_zone_started(self, data: dict):
         end_time = dateutil.parser.parse(data.get("endTime"))
         duration = data.get("durationInMinutes")
-        message = f":green_circle: **Zone {data.get('zoneName')}** started for {data.get('durationInMinutes')} {pluralizer.pluralize('minute', duration)} (Ends <t:{int(end_time.timestamp())}:R>)"
+        message = f":sweat_drops: **Zone {data.get('zoneName')}** started for {data.get('durationInMinutes')} {pluralizer.pluralize('minute', duration)} (Ends <t:{int(end_time.timestamp())}:R>)"
         self.discord_client.send_message(message)
 
     def handle_zone_completed(self, data: dict):
         message = f":white_check_mark: **Zone {data.get('zoneName')}** completed. Ran for {data.get('durationInMinutes')} {pluralizer.pluralize('minute', data.get('durationInMinutes'))}"
+        self.discord_client.send_message(message)
+
+    def handle_zone_paused(self, data: dict):
+        end_time = dateutil.parser.parse(data.get("endTime"))
+        duration = data.get("durationInMinutes")
+        message = f":pause_button: **Zone {data.get('zoneName')}** paused for {data.get('durationInMinutes')} {pluralizer.pluralize('minute', duration)} (Ends <t:{int(end_time.timestamp())}:R>)"
+        self.discord_client.send_message(message)
+
+    def handle_zone_cycling(self, data: dict):
+        end_time = dateutil.parser.parse(data.get("endTime"))
+        duration = data.get("durationInMinutes")
+        message = f":timer: **Zone {data.get('zoneName')}** soaking for {data.get('durationInMinutes')} {pluralizer.pluralize('minute', duration)} (Ends <t:{int(end_time.timestamp())}:R>)"
         self.discord_client.send_message(message)
 
     def handle_generic(self, data: dict):
@@ -98,4 +110,10 @@ class IncomingMessages:
             message = f"Unhandled Message: ```json\n{json.dumps(data)}```"
             self.discord_client.send_message(message)
             return
-        handler.handle(data)
+        try:
+            handler.handle(data)
+        except Exception as e:
+            message = (
+                f"Error handling message: ```json\n{json.dumps(data)}```\n\n```{e}```"
+            )
+            self.discord_client.send_message(message)
