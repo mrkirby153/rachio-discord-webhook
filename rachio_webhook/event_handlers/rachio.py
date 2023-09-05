@@ -48,6 +48,9 @@ class ZoneMessageHandler(MessageHandler):
         message = f":timer: **Zone {data.get('zoneName')}** soaking for {data.get('durationInMinutes')} {pluralizer.pluralize('minute', duration)} (Ends <t:{int(end_time.timestamp())}:R>)"
         self.discord_client.send_message(message)
 
+    def handle_zone_cycling_completed(self, data: dict):
+        pass  # Ignore this message
+
     def handle_generic(self, data: dict):
         message = f"Generic Zone Message: ```json\n{json.dumps(data)}```"
         self.discord_client.send_message(message)
