@@ -29,23 +29,27 @@ class ZoneMessageHandler(MessageHandler):
     def handle_zone_started(self, data: dict):
         end_time = dateutil.parser.parse(data.get("endTime"))
         duration = data.get("durationInMinutes")
-        message = f":sweat_drops: **Zone {data.get('zoneName')}** started for {data.get('durationInMinutes')} {pluralizer.pluralize('minute', duration)} (Ends <t:{int(end_time.timestamp())}:R>)"
+        message = f":sweat_drops: **{data.get('zoneName')}** started for {data.get('durationInMinutes')} {pluralizer.pluralize('minute', duration)} (Ends <t:{int(end_time.timestamp())}:R>)"
         self.discord_client.send_message(message)
 
     def handle_zone_completed(self, data: dict):
-        message = f":white_check_mark: **Zone {data.get('zoneName')}** completed. Ran for {data.get('durationInMinutes')} {pluralizer.pluralize('minute', data.get('durationInMinutes'))}"
+        message = f":white_check_mark: **{data.get('zoneName')}** completed. Ran for {data.get('durationInMinutes')} {pluralizer.pluralize('minute', data.get('durationInMinutes'))}"
         self.discord_client.send_message(message)
 
     def handle_zone_paused(self, data: dict):
         end_time = dateutil.parser.parse(data.get("endTime"))
         duration = data.get("durationInMinutes")
-        message = f":pause_button: **Zone {data.get('zoneName')}** paused for {data.get('durationInMinutes')} {pluralizer.pluralize('minute', duration)} (Ends <t:{int(end_time.timestamp())}:R>)"
+        message = f":pause_button: **{data.get('zoneName')}** paused for {data.get('durationInMinutes')} {pluralizer.pluralize('minute', duration)} (Ends <t:{int(end_time.timestamp())}:R>)"
         self.discord_client.send_message(message)
 
     def handle_zone_cycling(self, data: dict):
         end_time = dateutil.parser.parse(data.get("endTime"))
         duration = data.get("durationInMinutes")
-        message = f":timer: **Zone {data.get('zoneName')}** soaking for {data.get('durationInMinutes')} {pluralizer.pluralize('minute', duration)} (Ends <t:{int(end_time.timestamp())}:R>)"
+        message = f":timer: **{data.get('zoneName')}** soaking for {data.get('durationInMinutes')} {pluralizer.pluralize('minute', duration)} (Ends <t:{int(end_time.timestamp())}:R>)"
+        self.discord_client.send_message(message)
+
+    def handle_zone_stopped(self, data: dict):
+        message = f":stop_button: **{data.get('zoneName')}** stopped after {data.get('durationInMinutes')} {pluralizer.pluralize('minute', data.get('durationInMinutes'))}"
         self.discord_client.send_message(message)
 
     def handle_zone_cycling_completed(self, data: dict):
@@ -67,6 +71,14 @@ class DeviceMessageHandler(MessageHandler):
         message = f":green_circle: **{device['name']}** is online"
         self.discord_client.send_message(message)
 
+    def handle_sleep_mode_on(self, data: dict):
+        message = f":pause_button: **{data['deviceName']}** is on standby. No scheduled watering will occur."
+        self.discord_client.send_message(message)
+
+    def handle_sleep_mode_off(self, data: dict):
+        message = f":green_circle: **{data['deviceName']}** is no longer on standby."
+        self.discord_client.send_message(message)
+
     def handle_generic(self, data: dict):
         message = f"Generic Device Message: ```json\n{json.dumps(data)}```"
         self.discord_client.send_message(message)
@@ -85,6 +97,10 @@ class ScheduleMessageHandler(MessageHandler):
 
     def handle_schedule_completed(self, data: dict):
         message = f":white_check_mark: **Schedule {data.get('scheduleName')}** completed. Ran for {data.get('durationInMinutes')} {pluralizer.pluralize('minute', data.get('durationInMinutes'))}"
+        self.discord_client.send_message(message)
+
+    def handle_schedule_stopped(self, data: dict):
+        message = f":stop_button: **Schedule {data.get('scheduleName')}** stopped after {data.get('durationInMinutes')} {pluralizer.pluralize('minute', data.get('durationInMinutes'))}"
         self.discord_client.send_message(message)
 
 
